@@ -13,8 +13,8 @@ public class PostsApiController {
 
     private final PostsService postsService;
 
-    /** 게시물 등록
-     *
+    /**
+     * 게시물 등록
      * @param requestDto
      * @return save
      */
@@ -23,13 +23,22 @@ public class PostsApiController {
         return postsService.save(requestDto);
     }
 
-
+    /**
+     * 게시물 수정
+     * @param id
+     * @param requestDto
+     * @return update
+     */
     @PutMapping("/api/v1/posts/{id}")
     public Long update(@PathVariable Long id, @RequestBody PostsUpdateRequestDto requestDto) {
         return postsService.update(id, requestDto);
     }
 
-
+    /**
+     * 게시물 조회
+     * @param id
+     * @return PostResponseDto
+     */
     @GetMapping("/api/v1/posts/{id}")
     public PostsResponseDto findById (@PathVariable Long id) {
         return postsService.findById(id);
