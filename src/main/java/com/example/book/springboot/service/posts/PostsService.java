@@ -2,12 +2,16 @@ package com.example.book.springboot.service.posts;
 
 import com.example.book.springboot.domain.posts.Posts;
 import com.example.book.springboot.domain.posts.PostsRepository;
+import com.example.book.springboot.web.dto.PostsListResponseDto;
 import com.example.book.springboot.web.dto.PostsResponseDto;
 import com.example.book.springboot.web.dto.PostsSaveRequestDto;
 import com.example.book.springboot.web.dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -38,5 +42,14 @@ public class PostsService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
 
         return new PostsResponseDto(entity);
+    }
+
+    @Transactional(readOnly = true) // readOnly = true: 트랜잭션의 범위는 유지하되 조회 기능만 남겨두어 조회속도 개선
+    // 등록, 수정, 삭제 기능 없는 서비스 메서드에 사용하기
+    public List<PostsListResponseDto> findAllDesc() {
+        return postsRepository.findAllDesc().stream()
+                .map(PostsListResponseDto::new) // .map(PostListResponseDto:new) 는 .map(posts -> New PostListResponseDto(posts)) 와 같음
+                // postsRepository의 결과로 넘어온 Posts의 Stream을 map을 통해 PostsListResponseDto 변환 -> List로 반환하는 메서드
+                .collect(Collectors.toList());
     }
 }
