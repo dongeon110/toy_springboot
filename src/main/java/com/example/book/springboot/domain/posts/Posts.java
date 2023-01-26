@@ -1,5 +1,6 @@
 package com.example.book.springboot.domain.posts;
 
+import com.example.book.springboot.domain.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,7 @@ import javax.persistence.*;
 @Getter // 초기 구축 단계에서 테이블 설계가 빈번하게 변경되는데 lombok은 코드변경량을 최소화 해줌
 @NoArgsConstructor // 기본 생성자 자동 추가 (public Posts() {} 와 같은 효과)
 @Entity // 테이블과 링크될 클래스임을 나타냄, 기본값으로 카멜케이스 -> 언더스코어 네이밍으로 테이블이름을 매칭함
-public class Posts {
+public class Posts extends BaseTimeEntity {
 
     @Id // 해당 테이블의 PK 필드
     @GeneratedValue(strategy = GenerationType.IDENTITY) // PK의 생성규칙, GenerationType.IDENTITY = auto_increment, 웬만하면 Entity의 PK는 Long타입의 Auto_increment 추천 (MySQL 기준 bigint)
