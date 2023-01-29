@@ -1,6 +1,7 @@
 package com.example.book.springboot.config.auth;
 
 import com.example.book.springboot.config.auth.dto.OAuthAttributes;
+import com.example.book.springboot.config.auth.dto.SessionUser;
 import com.example.book.springboot.domain.user.User;
 import com.example.book.springboot.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -39,13 +40,15 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 .getClientRegistration()
                 .getProviderDetails()
                 .getUserInfoEndpoint()
-                .getUserNameAttributeName();
+                .getUserNameAttributeName(); // OAuth2 로그인 진행 시 키가 되는 필드값. PK와 같은 의미, 구글의 기본 코드는 sub, 네이버 카카오 미지원
+                // 이후 네이버, 구글 로그인을 동시 지원할 떄 사용
 
-        OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttribute());
+        OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
+        // OAuthAttributes: OAuth2UserService를 통해 가져온 OAuth2User의 attribute를 담을 클래스, 이후 네이버 등 다른 소셜 로그인도 이 클래스 사용
 
         User user = saveOrUpdate(attributes);
 
-        httpSession.setAttribute("user", new SessionUser(user));
+        httpSession.setAttribute("user", new SessionUser(user)); // SessionUser: 세션에 사용자 정보를 저장하기 위한 Dto
 
         return new DefaultOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority(user.getRoleKey())),

@@ -1,5 +1,7 @@
 package com.example.book.springboot.config.auth.dto;
 
+import com.example.book.springboot.domain.user.Role;
+import com.example.book.springboot.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -27,10 +29,31 @@ public class OAuthAttributes {
         this.picture = picture;
     }
 
-    public static OAuthAttributes of(String registrationId,
+    public static OAuthAttributes of(String registrationId, // of(): OAuth2User에서 반환하는 사용자 정보는 Map이기 때문에 값 하나하나를 변환해야만 함
                                      String userNameAttributeName,
                                      Map<String, Object> attributes) {
 
         return ofGoogle(userNameAttributeName, attributes);
+    }
+
+    private static OAuthAttributes ofGoogle(String userNameAttributeName,
+                                            Map<String, Object> attributes) {
+        return OAuthAttributes.builder()
+                .name((String) attributes.get("name"))
+                .email((String) attributes.get("email"))
+                .picture((String) attributes.get("picture"))
+                .attributes(attributes)
+                .nameAttributeKey(userNameAttributeName)
+                .build();
+    }
+
+    public User toEntity() { // toEntity(): User 엔티티 생성, OAuthAttributes에서 엔티티를 생성하는 시점은 처음 가입할 떄, 가입시 기본 권한 GUEST로 주기 위해 role 빌더 값에는 Role.GEUST 사용
+        return User.builder()
+                .name(name)
+                .email(email)
+                .picture(picture)
+                .role(Role.GUEST)
+                .build();
+
     }
 }
