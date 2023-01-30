@@ -27,7 +27,7 @@ public class IndexController {
         SessionUser user = (SessionUser)httpSession.getAttribute("user"); // CustomOAuth2UserService에서 로그인 성공 시 세션에 SessionUser 저장
 
         if (user != null) { // 세션에 저장된 값이 있으면 model에 userName으로 등록
-            model.addAttribute("userName", "user.getName()");
+            model.addAttribute("userName", user.getName());
         }
 
         return "index"; // mustache starter 덕분에 앞의 경로는 src/main/resources/templates, 뒤로는 .mustache 가 붙음
