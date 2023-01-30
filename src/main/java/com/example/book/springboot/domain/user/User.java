@@ -11,6 +11,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
+@Table(name = "Users") // H2 Database에서 User 테이블은 예약어 충돌로 DDL 에러 발생
 public class User extends BaseTimeEntity {
 
     @Id
