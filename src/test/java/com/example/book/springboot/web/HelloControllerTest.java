@@ -31,6 +31,10 @@ public class HelloControllerTest {
     @Autowired // 스프링이 관리하는 빈을 주입받음
     private MockMvc mvc; // 웹 API 테스트 할때 사용, 스프링 MVC 테스트의 시작점, 이 클래스를 통해 HTTP GET, POST 등에 대한 API 테스트 가능
 
+    /**
+     * USER 롤이 있는 경우 성공. hello를 리턴해야 한다.
+     * @throws Exception
+     */
     @WithMockUser(roles = "USER")
     @Test
     public void hello가_리턴된다() throws Exception {
@@ -39,6 +43,18 @@ public class HelloControllerTest {
         mvc.perform(get("/hello")) // MockMvc를 통해 /hello 주소로 HTTP GET 요청, 체이닝이 지원되어 아래처럼 여러 검증을 이어서 선언가능
                 .andExpect(status().isOk()) // mvc.perform 결과 검증, HTTP Header Status 검증, Ok = 200 인지 아닌지
                 .andExpect(content().string(hello)); // mvc.perform 결과 검증, String hello를 리턴하기 때문에 이 값이 맞는 지 검증
+    }
+
+    /**
+     * 권한이 없는 경우 302 에러를 리턴해야 한다.
+     * @throws Exception
+     */
+    @Test
+    public void hello가_리턴된다_fail() throws Exception {
+        String hello = "hello";
+
+        mvc.perform(get("/hello"))
+                .andExpect(status().is(302));
     }
 
     @WithMockUser(roles = "USER")
