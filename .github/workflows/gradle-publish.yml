@@ -7,8 +7,8 @@
 env:  
   S3_BUCKET_NAME: build-toy-springboot
   PROJECT_NAME: toy_springboot
-  CODE_DEPLOY_APP_NAME: toy_springboot
-  CODE_DEPLOY_GROUP_NAME: top_springboot_group
+  CODE_DEPLOY_APP_NAME: toy-springboot
+  CODE_DEPLOY_GROUP_NAME: top-springboot-group
   
 name: depoly
 
