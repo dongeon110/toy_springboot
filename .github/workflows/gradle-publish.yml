@@ -4,7 +4,10 @@
 # documentation.
 # This workflow will build a package using Gradle and then publish it to GitHub packages when a release is created
 # For more information see: https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#Publishing-using-gradle
-
+env:  
+  S3_BUCKET_NAME: build-toy-springboot
+  PROJECT_NAME: toy_springboot
+  
 name: depoly
 
 on:
@@ -52,7 +55,20 @@ jobs:
     - name: Show Current Time
       run: echo "CurrentTime=${{steps.current-time.outputs.formattedTime}}"
       shell: bash
-      
+
+    - name: Make zip file
+      run: zip -r ./$PROJECT_NAME.zip .
+      shell: bash
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-northeast-2
+
+    - name: Upload to S3
+      run: aws s3 cp --region ap-northeast-2 ./$PROJECT_NAME.zip s3://$S3_BUCKET_NAME/$PROJECT_NAME/$PROJECT_NAME.zip    #(14)
 #     - name: Build with Gradle
 #       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
 #       with:
