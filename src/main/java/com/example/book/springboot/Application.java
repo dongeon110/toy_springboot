@@ -2,6 +2,7 @@ package com.example.book.springboot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.ApplicationPidFileWriter;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 //@EnableJpaAuditing // JPA Auditing 활성화 // 테스트시 같이 스캔하게 되어 분리하기 위해 비활성화 JpaConfig로 이동
@@ -9,6 +10,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 // @SpringBootApplication 이 있는 위치부터 설정을 읽어가기 때문에 항상 프로젝트 최상단 위치
 public class Application {
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args); // Springboot 내장 WAS 실행
+
+        SpringApplication application = new SpringApplication(Application.class);
+        application.addListeners(new ApplicationPidFileWriter());
+        application.run(args);
+//        SpringApplication.run(Application.class, args); // Springboot 내장 WAS 실행
     }
 }
