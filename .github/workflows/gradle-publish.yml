@@ -10,7 +10,7 @@ env:
   CODE_DEPLOY_APP_NAME: toy-springboot
   CODE_DEPLOY_GROUP_NAME: toy-springboot-group
   
-name: depoly
+name: deploy
 
 on:
   release:
