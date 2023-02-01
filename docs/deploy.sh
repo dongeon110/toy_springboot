@@ -1,7 +1,7 @@
 #!/bin/bash
 
 REPOSITORY=/home/ec2-user/app/step1
-PROJECT_NAME=toy-springboot
+PROJECT_NAME=demo
 
 cd $REPOSITORY/$PROJECT_NAME/
 
